@@ -1,3 +1,4 @@
+package checkers;
 /* Matthew Proetsch
  * COP3330 Section 0001
  * Piece.java: see Javadoc comments for details

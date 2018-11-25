@@ -1,3 +1,4 @@
+package checkers;
 /* Matthew Proetsch
  * COP3330 Section 0001
  * SimpleCheckersGUI.java (see Javadoc comment for details)
@@ -33,7 +34,7 @@ import javax.swing.JPanel;
  */
 
 
-public class SimpleCheckersGUI implements MouseListener,
+public class Checkers implements MouseListener,
 									ActionListener {
 	
 	/** The frame that will serve to holds the contents of our game */
@@ -78,7 +79,7 @@ public class SimpleCheckersGUI implements MouseListener,
 	
 	
 	/** Constructor takes no arguments and forms a new game */
-	public SimpleCheckersGUI() {
+	public Checkers() {
 		
 		//display the interface
 		CreateAndShowGUI();
@@ -435,13 +436,5 @@ public class SimpleCheckersGUI implements MouseListener,
 		frame.setVisible(true);
 		
 	}
-	
-	
-	/** Instantiate this class to set the wheels of progress in beautiful event-driven motion */
-	public static void main(String[] args) {
-		new SimpleCheckersGUI();
-	}
-
-	
 
 }
