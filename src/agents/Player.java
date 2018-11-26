@@ -38,6 +38,10 @@ public class Player extends Agent {
 		addBehaviour(new CheckTurn());
 		addBehaviour(new OfferTurn());
 	}
+	public void play() {
+		game.selectSquare(game.getBoard().getSquare(pieces.get(0)));
+		game.selectSquare(game.getBoard().getSquare(pieces.get(0).getRow()-1, pieces.get(0).getCol()+1));
+	}
 	protected void takeDown() {
 		try {
 			DFService.deregister(this);
