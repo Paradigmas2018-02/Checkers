@@ -4,8 +4,9 @@ package checkers;
  * Board.java: See Javadoc for details
  */
 
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Vector;
-import java.awt.*;
 
 
 /** Stores the game board as a 2D array of Squares. Also provides functionality to move the
@@ -26,13 +27,24 @@ public class Board {
     public static final int cols = 8;
     /** An array of Squares that represents the game board */
     private Square[][] gameBoard;
+    private ArrayList<Piece> p1Pieces;
+    private ArrayList<Piece> p2Pieces;
+    
+    public ArrayList<Piece> getP1Pieces() {
+		return p1Pieces;
+	}
 
+	public ArrayList<Piece> getP2Pieces() {
+		return p2Pieces;
+	}
 
-    /** Constructor takes no args and produces a Board of size rows x cols with alternating background colors */
+	/** Constructor takes no args and produces a Board of size rows x cols with alternating background colors */
     public Board() {
     	
 		
     	gameBoard = new Square[rows][cols];
+    	p1Pieces = new ArrayList<Piece>();
+    	p2Pieces = new ArrayList<Piece>();
     	
     	//Set up the game board with alternating colors
     	boolean lastcolor = false;
@@ -88,9 +100,10 @@ public class Board {
     public Square getSquare(int row, int col) {
         if(inBounds(row, col))
         	return gameBoard[row][col];
-        
-        
         return null;
+    }
+    public Square getSquare(Piece p) {
+    	return gameBoard[p.getRow()][p.getCol()];
     }
     
     /** Fill this Board with Red pieces on top, and Black pieces on bottom */
@@ -98,16 +111,26 @@ public class Board {
     	
 		//Have the Red side on top, Black side on bottom
 		//Establish the Red side first
-		for(int row = 0; row < 3; row++)
+    	p1Pieces.clear();
+    	p2Pieces.clear();
+    	
+    	for(int row = 0; row < 3; row++)
 			for(int col = 0; col < 8; col++)
-				if(getSquare(row, col).getBackgroundColor() == Square.BackgroundColor.DARK)
-					getSquare(row,col).setOccupant(new Piece(Color.RED, row, col));
-		
+				if(getSquare(row, col).getBackgroundColor() == Square.BackgroundColor.DARK) {
+					Piece p = new Piece(Color.RED, row, col);
+					p1Pieces.add(p);
+					getSquare(row,col).setOccupant(p);
+				}
+
+
 		//Now establish the Black side
 		for(int row = 5; row < 8; row++)
 			for(int col = 0; col < 8; col++)
-				if(getSquare(row, col).getBackgroundColor() == Square.BackgroundColor.DARK)
-					getSquare(row,col).setOccupant(new Piece(Color.BLACK, row, col));
+				if(getSquare(row, col).getBackgroundColor() == Square.BackgroundColor.DARK) {
+					Piece p = new Piece(Color.BLACK, row, col);
+					p2Pieces.add(p);
+					getSquare(row,col).setOccupant(p);	
+				}
     }
     
     
