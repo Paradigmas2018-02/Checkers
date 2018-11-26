@@ -34,7 +34,7 @@ import javax.swing.JPanel;
  * @version 0.9b
  */
 
-public class Checkers implements MouseListener{
+public class Checkers{
 
 	/** Keep track of the current turn */
 	private Color currentTurn;
@@ -43,7 +43,7 @@ public class Checkers implements MouseListener{
 
 	/** The board which will store our game's state */
 	private Board board;
-
+	
 	/** The number of checkers remaining for Black side */
 	private int blackCheckersLeft;
 
@@ -52,7 +52,9 @@ public class Checkers implements MouseListener{
 
 	/** Hold a reference to the currently selected Piece */
 	private Square selectedSquare;
-
+	public Board getBoard() {
+		return board;
+	}
 	/** Constructor takes no arguments and forms a new game */
 	public Checkers() {
 
@@ -82,11 +84,9 @@ public class Checkers implements MouseListener{
 
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-
-		Square sel = (Square) e.getComponent();
-
+	public void selectSquare(Square s) {
+		
+		Square sel = s;
 		// Ensure that the correct color Piece has been chosen
 		// The Piece's color should be equal to currentTurn, unless this is the first
 		// move
@@ -298,29 +298,4 @@ public class Checkers implements MouseListener{
 		board.placeStartingPieces();
 		return board;
 	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
