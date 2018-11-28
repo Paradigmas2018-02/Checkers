@@ -1,5 +1,6 @@
 package checkers;
 
+import agents.ConversationConstants;
 import agents.Player;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -16,14 +17,14 @@ public class Main {
 		Profile p = new ProfileImpl(pp);
 		AgentContainer ac = jade.core.Runtime.instance().createMainContainer(p);
 		
-		Player p1 = new Player(c, c.getBoard().getP1Pieces());
-		Player p2 = new Player(c, c.getBoard().getP2Pieces());
+		Player p1 = new Player(ConversationConstants.PLAYER_1_NAME, c, c.getBoard().getP1Pieces());
+		Player p2 = new Player(ConversationConstants.PLAYER_2_NAME, c, c.getBoard().getP2Pieces());
 		try {
 			ac.acceptNewAgent("Pablo", p1).start();
 			ac.acceptNewAgent("Rodrigo", p2).start();
 		}catch(StaleProxyException e) {
 			throw new Error(e);
 		}
-		p2.play();
+		
 	}
 }
