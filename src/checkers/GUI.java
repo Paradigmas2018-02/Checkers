@@ -16,10 +16,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-public class GUI implements ActionListener{
+public class GUI implements ActionListener {
 	/** Border width between squares in the game board */
 	private final int borderWidth = 1;
-	
+
 	/** The frame that will serve to holds the contents of our game */
 	private JFrame frame;
 
@@ -40,7 +40,7 @@ public class GUI implements ActionListener{
 
 	/** Exit menu item */
 	private JMenuItem exit;
-	
+
 	private Checkers checkers;
 
 	public GUI(Checkers checkers, Board board) {
@@ -113,12 +113,11 @@ public class GUI implements ActionListener{
 			}
 		}
 	}
-	
+
 	public void updateLabel(String newLabel) {
 		piecesLabel.setText(newLabel);
 	}
-	
-	
+
 	@Override
 	/** Perform the appropriate action when a menu item is clicked */
 	public void actionPerformed(ActionEvent e) {
@@ -127,10 +126,10 @@ public class GUI implements ActionListener{
 			frame.remove(boardpanel);
 			boardpanel = new JPanel(new GridLayout(8, 8));
 			boardpanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			
+
 			Board b = checkers.newBoard();
 			addBoardToPanel(b, boardpanel);
-			
+
 			frame.pack();
 			frame.setVisible(true);
 			frame.add(boardpanel, 0);

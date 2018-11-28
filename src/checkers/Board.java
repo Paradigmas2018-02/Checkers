@@ -147,6 +147,11 @@ public class Board {
 		 */
 		
 		Vector<Square> possibleMoves = new Vector<Square>();
+
+		//Piece is deactivated
+		if(!p.isActive())
+			return possibleMoves;
+		
 		Color pColor = p.getColor();
 		
 		int row = p.getRow();
@@ -275,7 +280,9 @@ public class Board {
 			int takeCol = (oldCol + newCol) / 2;
 			
 			Square takeSquare = getSquare(takeRow, takeCol);
+			takeSquare.getOccupant().setActive(false);
 			takeSquare.setOccupant(null);
+			
 			takeSquare.update(takeSquare.getGraphics());
 			
 			jumpPerformed = true;

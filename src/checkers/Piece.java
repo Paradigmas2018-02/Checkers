@@ -14,7 +14,7 @@ import java.awt.*;
  */
 public class Piece {
 	
-	
+	private boolean isActive = true;
 	/** The current row of the game board that this Piece resides on */
 	private int row;
 	
@@ -93,6 +93,14 @@ public class Piece {
 				 ", col " + Integer.toString(this.getCol()));
 		
 		return s.toString();
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }
