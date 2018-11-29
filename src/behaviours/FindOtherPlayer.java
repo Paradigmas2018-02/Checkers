@@ -66,67 +66,18 @@ public class FindOtherPlayer extends Behaviour {
 
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				System.out.println(myAgent.getName() + "UÉ");
+				System.out.println(myAgent.getLocalName() + ": UÉ.");
+			}
+			Date horaAtual = new Date();
+			if (horaAtual.getTime() - horario.getTime() > 5000) {
+				System.out.println(myAgent.getLocalName() + " cansei de esperar " + players.get(0).getLocalName()
+						+ ", vou tentar outra pessoa");
+				players.remove(0);
+				isEsperandoResposta = false;
 			}
 		}
 	}
 
-	public static AID searchPlayer2(Agent agent) {
-
-		DFAgentDescription dfAgentDescription = new DFAgentDescription();
-		ServiceDescription serviceDescription = new ServiceDescription();
-
-		serviceDescription.setType(ConversationConstants.PLAYER_TYPE);
-		serviceDescription.setName(ConversationConstants.PLAYER_2_NAME);
-
-		dfAgentDescription.addServices(serviceDescription);
-
-		DFAgentDescription[] result;
-		try {
-			result = DFService.search(agent, dfAgentDescription);
-
-			AID agentsAID = result[0].getName();
-			if (agentsAID == null) {
-				System.out.println("Null AID:" + serviceDescription.getName() + " and " + serviceDescription.getType());
-			}
-
-			return result[0].getName();
-
-		} catch (FIPAException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	public static AID searchPlayer(Agent agent) {
-		DFAgentDescription dfAgentDescription = new DFAgentDescription();
-		ServiceDescription serviceDescription = new ServiceDescription();
-
-		serviceDescription.setType(ConversationConstants.PLAYER_TYPE);
-
-		dfAgentDescription.addServices(serviceDescription);
-
-		DFAgentDescription[] results;
-		try {
-			results = DFService.search(agent, dfAgentDescription);
-
-			AID agentsAID = null;
-			for(DFAgentDescription desc : results) {
-				if(!desc.getName().getName().equals(agent.getAID().getName())) {
-					agentsAID = desc.getName();
-					break;
-				}
-			}
-			if (agentsAID == null) {
-				System.out.println("Null AID:" + serviceDescription.getName() + " and " + serviceDescription.getType());
-			}
-			return agentsAID;
-
-		} catch (FIPAException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
 	@Override
 	public boolean done() {
 		return jogoDecidido;
