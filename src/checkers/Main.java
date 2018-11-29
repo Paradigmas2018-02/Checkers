@@ -19,10 +19,16 @@ public class Main {
 		
 		Player p1 = new Player(ConversationConstants.PLAYER_1_NAME, c, c.getBoard().getP1Pieces());
 		Player p2 = new Player(ConversationConstants.PLAYER_2_NAME, c, c.getBoard().getP2Pieces());
+		Player p3 = new Player(ConversationConstants.PLAYER_2_NAME, c, c.getBoard().getP2Pieces());
+
 		try {
 			ac.acceptNewAgent("Pablo", p1).start();
+			Thread.sleep(100);
 			ac.acceptNewAgent("Rodrigo", p2).start();
-		}catch(StaleProxyException e) {
+			Thread.sleep(5000);
+			ac.acceptNewAgent("Intruso", p3).start();
+
+		}catch(StaleProxyException | InterruptedException e) {
 			throw new Error(e);
 		}
 		

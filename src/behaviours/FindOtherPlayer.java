@@ -1,15 +1,14 @@
 package behaviours;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import agents.ConversationConstants;
+import agents.JADEHelper;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -18,28 +17,44 @@ public class FindOtherPlayer extends Behaviour {
 	private boolean jogoDecidido = false;
 	private Integer myRoll;
 
+	private ArrayList<AID> players;
+
+	private Date horario;
+
+	public FindOtherPlayer(Agent agent) {
+		setAgent(agent);
+		System.out.println(myAgent.getLocalName() + " está procurando outro player :)");
+		players = JADEHelper.searchPlayers(myAgent);
+	}
+
 	@Override
 	public void action() {
-
 		if (!isEsperandoResposta) {
-			System.out.println(myAgent.getName() + " CAÇANDO PLAYER 2");
-			AID player2ID = searchPlayer2(myAgent);
+			if (!players.isEmpty()) {
+				AID player = players.get(0);
 
-			if (player2ID != null) {
 				ACLMessage aclMessage = new ACLMessage(ACLMessage.CFP);
 				aclMessage.setConversationId(ConversationConstants.PLAYER_TO_PLAYER);
 
 				Random generator = new Random();
 				myRoll = generator.nextInt();
 
-				System.out.println(myAgent.getName() + " ACHEI O PLAYER 2 e ROLEI");
-				System.out.println(myAgent.getName() + myRoll);
+				System.out
+						.println(myAgent.getLocalName() + ": achei alguém vou rolar um número e ver se ele joga cmg!");
+				System.out.println(myAgent.getLocalName() + ": rolei " + myRoll);
 
 				aclMessage.setContent(myRoll.toString());
 
-				aclMessage.addReceiver(player2ID);
+				aclMessage.addReceiver(player);
+
 				myAgent.send(aclMessage);
 				isEsperandoResposta = true;
+				horario = new Date();
+			} else {
+				System.out.println(myAgent.getLocalName() + ": Não encontrei ninguém pra jogar, vou esperar.");
+				myAgent.addBehaviour(new WaitFirstPlayer());
+				myAgent.removeBehaviour(this);
+
 			}
 		} else {
 			MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
@@ -50,13 +65,15 @@ public class FindOtherPlayer extends Behaviour {
 				String text = msg.getContent();
 				Integer roll = null;
 				try {
-					roll = Integer.parseInt(text);
+					roll = Integer.parseInt(text.split(",")[0]);
+					String uniqueID = text.split(",")[1];
 					if (roll > myRoll) {
-						System.out.println(myAgent.getName() + "Affs, perdi. Pode começar que to esperando");
-						myAgent.addBehaviour(new Wait());
+						System.out.println(myAgent.getLocalName() + ": affs, perdi. " + msg.getSender().getLocalName()
+								+ ", pode começar que to esperando.");
+						myAgent.addBehaviour(new Wait(uniqueID, msg.getSender().getLocalName()));
 					} else {
-						System.out.println(myAgent.getName() + "Rá ganhei, vou jogar");
-						myAgent.addBehaviour(new Play());
+						System.out.println(myAgent.getLocalName() + ": Rá ganhei, vou começar jogando");
+						myAgent.addBehaviour(new Play(uniqueID, msg.getSender().getLocalName()));
 					}
 				} catch (Exception e) {
 				}

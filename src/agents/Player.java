@@ -41,13 +41,7 @@ public class Player extends Agent {
 		} catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-
-		if (name == ConversationConstants.PLAYER_1_NAME) {
-			addBehaviour(new FindOtherPlayer());
-		} else {
-			addBehaviour(new WaitFirstPlayer());
-		}
-
+		addBehaviour(new FindOtherPlayer(this));
 	}
 
 	public void play() {
@@ -75,7 +69,7 @@ public class Player extends Agent {
 		
 		game.selectSquare(game.getBoard().getSquare(p));
 		try {
-			Thread.sleep(100);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

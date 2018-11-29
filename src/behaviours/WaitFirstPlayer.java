@@ -1,6 +1,9 @@
 package behaviours;
 
 import java.util.Random;
+import java.util.UUID;
+
+import com.sun.xml.internal.fastinfoset.algorithm.UUIDEncodingAlgorithm;
 
 import agents.ConversationConstants;
 import jade.core.behaviours.CyclicBehaviour;
@@ -16,7 +19,7 @@ public class WaitFirstPlayer extends CyclicBehaviour {
 		ACLMessage msg = myAgent.receive(mt);
 		if (msg != null) {
 
-			System.out.println(myAgent.getName()+ " RECEBI MSG PRA JOGAR");
+			System.out.println(myAgent.getLocalName()+ ": Opa, finalmente alguém querendo jogar :D");
 			String text = msg.getContent();
 			Integer roll = null;
 			try {
@@ -27,29 +30,34 @@ public class WaitFirstPlayer extends CyclicBehaviour {
 			ACLMessage reply = msg.createReply();
 			if (roll != null) {
 				reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-
 				Random generator = new Random();
 				int myRoll = generator.nextInt();
 				
+				
+				System.out.println(myAgent.getLocalName()+": hmm, a pessoa rolou " + roll);
+				System.out.println(myAgent.getLocalName()+": vou tentar rolar melhor, e ..." + myRoll);
+				
+				String uniqueID = UUID.randomUUID().toString();
 
-				System.out.println(myAgent.getName()+" O CARA ROLOU " + roll);
-				System.out.println(myAgent.getName()+" ROLEI " + myRoll);
-				
 				if(myRoll < roll) {
-					myAgent.addBehaviour(new Wait());
+					System.out.println(myAgent.getLocalName() + ": Droga, perdi.");
+					myAgent.addBehaviour(new Wait(uniqueID, msg.getSender().getLocalName()));
 				}else {
-					myAgent.addBehaviour(new Play());
+					System.out.println(myAgent.getLocalName() + ": Rá ganhei, vou começar jogando");
+					myAgent.addBehaviour(new Play(uniqueID, msg.getSender().getLocalName()));
 				}
+
+				reply.setContent(String.valueOf(myRoll)+","+uniqueID);
 				
-				reply.setContent(String.valueOf(myRoll));
 			} else {
 				reply.setPerformative(ACLMessage.REFUSE);
 
-				System.out.println(myAgent.getName()+" O CARA NÃO ROLOU");
+				System.out.println(myAgent.getLocalName()+": NÃO ROLOU NENHUM NÚMERO, quer decidir quem começa como!??!@#");
 				reply.setContent("You didn't roll a number to see who starts");
 			}
 			
 			myAgent.send(reply);
+			myAgent.removeBehaviour(this);
 		} else {
 			block();
 		}
