@@ -13,7 +13,7 @@ public class Main {
 		pp.setProperty(Profile.GUI, Boolean.TRUE.toString());
 		Profile p = new ProfileImpl(pp);
 		AgentContainer ac = jade.core.Runtime.instance().createMainContainer(p);
-		
+
 		Player p1 = new Player("Pablo");
 		Player p2 = new Player("Rodrigo");
 		Player p3 = new Player("Intruso");
@@ -27,10 +27,10 @@ public class Main {
 			ac.acceptNewAgent(p3.getNome(), p3).start();
 			Thread.sleep(15000);
 			ac.acceptNewAgent(p4.getNome(), p4).start();
-			
-		}catch(StaleProxyException | InterruptedException e) {
+
+		} catch (StaleProxyException | InterruptedException e) {
 			throw new Error(e);
 		}
-		
+
 	}
 }

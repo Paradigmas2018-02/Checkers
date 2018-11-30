@@ -278,7 +278,7 @@ public class Checkers {
 			currentTurn = Color.BLACK;
 
 			updateStatus();
-		}else{
+		} else {
 			isEnded = true;
 			gui.close();
 		}

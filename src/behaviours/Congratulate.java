@@ -1,8 +1,6 @@
 package behaviours;
 
-import agents.ConversationConstants;
 import agents.JADEHelper;
-import agents.Player;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;

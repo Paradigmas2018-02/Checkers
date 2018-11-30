@@ -1,6 +1,7 @@
 package agents;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -17,7 +18,7 @@ public class JADEHelper {
 		DFAgentDescription[] results;
 		try {
 			results = DFService.search(agent, description);
-			
+
 			AID agentsAID = results[0].getName();
 			if (agentsAID == null) {
 				System.out.println("Agente não encontrado");
@@ -43,13 +44,22 @@ public class JADEHelper {
 		dfAgentDescription.addServices(serviceDescription);
 		return dfAgentDescription;
 	}
-	
+
 	public static void esperar(int millis) {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
 		}
 	}
+
+	public static void esperarVariando(int millis) {
+		try {
+			Random generator = new Random();
+			Thread.sleep(generator.nextInt(millis));
+		} catch (InterruptedException e) {
+		}
+	}
+
 	public static ArrayList<AID> searchPlayers(Agent myAgent) {
 		DFAgentDescription description = createDescription(null);
 

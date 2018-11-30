@@ -6,8 +6,6 @@ import java.util.Vector;
 
 import behaviours.Congratulate;
 import behaviours.FindOtherPlayer;
-import behaviours.WaitFirstPlayer;
-import checkers.Board;
 import checkers.Checkers;
 import checkers.Move;
 import checkers.Piece;
@@ -23,10 +21,6 @@ public class Player extends Agent {
 	private ArrayList<Piece> pieces;
 	private String nome;
 
-	public String getNome() {
-		return nome;
-	}
-
 	private boolean isPlaying = false;
 
 	public Player(String name) {
@@ -34,7 +28,6 @@ public class Player extends Agent {
 	}
 
 	protected void setup() {
-		// Register the book-selling service in the yellow pages
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -51,11 +44,9 @@ public class Player extends Agent {
 	}
 
 	public boolean play(String adversaryName) {
-		isGameEnded(adversaryName);
-		
-		if (isPlaying) {
-			Board board = game.getBoard();
+		checkGameEnd(adversaryName);
 
+		if (isPlaying) {
 			Vector<Move> allPossibleMoves = getAllPossibleMoves();
 			Random generator = new Random();
 			int index = generator.nextInt(allPossibleMoves.size());
@@ -64,15 +55,12 @@ public class Player extends Agent {
 			Piece p = allPossibleMoves.elementAt(index).getPiece();
 
 			game.selectSquare(game.getBoard().getSquare(p));
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			JADEHelper.esperar(1000);
+
 			game.selectSquare(move);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 
@@ -80,7 +68,7 @@ public class Player extends Agent {
 
 	private Vector<Move> getAllPossibleMoves() {
 		Vector<Move> allPossibleMoves = new Vector<Move>();
-		
+
 		for (Piece p : pieces) {
 			Vector<Square> pieceMoves = getMoves(p);
 			for (Square s : pieceMoves) {
@@ -96,29 +84,28 @@ public class Player extends Agent {
 		return pieceMoves;
 	}
 
-	private void isGameEnded(String adversaryName) {
-		if(!hasActivePieces() || getAllPossibleMoves().size() == 0) {
+	private void checkGameEnd(String adversaryName) {
+		if (!hasActivePieces() || getAllPossibleMoves().size() == 0) {
 			isPlaying = false;
 			addBehaviour(new Congratulate(game.getId(), adversaryName));
 		}
 	}
-	
+
 	private boolean hasActivePieces() {
-		for(Piece p: pieces) {
-			if(p.isActive()) {
+		for (Piece p : pieces) {
+			if (p.isActive()) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	protected void takeDown() {
 		try {
 			DFService.deregister(this);
 		} catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-		// Printout a dismissal message
 		System.out.println("Player-Agent " + getAID().getName() + " terminating.");
 	}
 
@@ -130,5 +117,9 @@ public class Player extends Agent {
 		} else {
 			pieces = c.getBoard().getP2Pieces();
 		}
+	}
+
+	public String getNome() {
+		return nome;
 	}
 }
