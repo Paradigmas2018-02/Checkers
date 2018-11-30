@@ -35,7 +35,9 @@ import javax.swing.JPanel;
  */
 
 public class Checkers{
-
+	
+	private String id;
+	private boolean isEnded = false;
 	/** Keep track of the current turn */
 	private Color currentTurn;
 
@@ -56,8 +58,8 @@ public class Checkers{
 		return board;
 	}
 	/** Constructor takes no arguments and forms a new game */
-	public Checkers() {
-
+	public Checkers(String uniqueID) {
+		this.id = uniqueID;
 		// display the interface
 		CreateAndShowGUI();
 
@@ -297,5 +299,17 @@ public class Checkers{
 		board = new Board();
 		board.placeStartingPieces();
 		return board;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String uniqueID) {
+		this.id = uniqueID;
+	}
+	public boolean isEnded() {
+		return isEnded;
+	}
+	public void setEnded(boolean isEnded) {
+		this.isEnded = isEnded;
 	}
 }

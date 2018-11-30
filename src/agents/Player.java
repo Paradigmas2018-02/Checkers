@@ -19,12 +19,15 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class Player extends Agent {
 	private Checkers game;
 	private ArrayList<Piece> pieces;
-	private String name;
+	private String nome;
+	
+	public String getNome() {
+		return nome;
+	}
 
-	public Player(String name, Checkers c, ArrayList<Piece> pieces) {
-		game = c;
-		this.pieces = pieces;
-		this.name = name;
+	private boolean isPlaying = false;
+	public Player(String name) {
+		this.nome = name;
 	}
 
 	protected void setup() {
@@ -33,7 +36,7 @@ public class Player extends Agent {
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType(ConversationConstants.PLAYER_TYPE);
-		sd.setName(name);
+		sd.setName(nome);
 		dfd.addServices(sd);
 
 		try {
@@ -86,5 +89,15 @@ public class Player extends Agent {
 		}
 		// Printout a dismissal message
 		System.out.println("Player-Agent " + getAID().getName() + " terminating.");
+	}
+
+	public void startGame(Checkers c, boolean flag) {
+		isPlaying = true;
+		game = c;
+		if(flag) {
+			pieces = c.getBoard().getP1Pieces();			
+		}else {
+			pieces = c.getBoard().getP2Pieces();
+		}
 	}
 }

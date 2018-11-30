@@ -6,6 +6,9 @@ import java.util.Random;
 
 import agents.ConversationConstants;
 import agents.JADEHelper;
+import agents.Player;
+import checkers.Checkers;
+import checkers.CheckersManager;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -67,6 +70,11 @@ public class FindOtherPlayer extends Behaviour {
 				try {
 					roll = Integer.parseInt(text.split(",")[0]);
 					String uniqueID = text.split(",")[1];
+					
+					Checkers c = CheckersManager.getChecker(uniqueID);
+					Player p = (Player) myAgent;
+					
+					p.startGame(c, false);
 					if (roll > myRoll) {
 						System.out.println(myAgent.getLocalName() + ": affs, perdi. " + msg.getSender().getLocalName()
 								+ ", pode começar que to esperando.");

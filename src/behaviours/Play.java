@@ -31,6 +31,7 @@ public class Play extends OneShotBehaviour {
 			myAgent.addBehaviour(new Wait(idConversation, playerName));
 		}else {
 			System.out.println(myAgent.getAID().getLocalName()  +": Não achei o outro cara, algo deu errado no jogo :/");
+			myAgent.addBehaviour(new FindOtherPlayer(myAgent));
 		}
 	}
 

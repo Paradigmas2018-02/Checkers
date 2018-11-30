@@ -10,24 +10,25 @@ import jade.wrapper.StaleProxyException;
 
 public class Main {
 	public static void main(String[] args) {
-		Checkers c = new Checkers();
-		
 		Properties pp = new Properties();
 		pp.setProperty(Profile.GUI, Boolean.TRUE.toString());
 		Profile p = new ProfileImpl(pp);
 		AgentContainer ac = jade.core.Runtime.instance().createMainContainer(p);
 		
-		Player p1 = new Player(ConversationConstants.PLAYER_1_NAME, c, c.getBoard().getP1Pieces());
-		Player p2 = new Player(ConversationConstants.PLAYER_2_NAME, c, c.getBoard().getP2Pieces());
-		Player p3 = new Player(ConversationConstants.PLAYER_2_NAME, c, c.getBoard().getP2Pieces());
+		Player p1 = new Player("Pablo");
+		Player p2 = new Player("Rodrigo");
+		Player p3 = new Player("Intruso");
+		Player p4 = new Player("Amigo do intruso");
 
 		try {
-			ac.acceptNewAgent("Pablo", p1).start();
+			ac.acceptNewAgent(p1.getNome(), p1).start();
 			Thread.sleep(100);
-			ac.acceptNewAgent("Rodrigo", p2).start();
+			ac.acceptNewAgent(p2.getNome(), p2).start();
 			Thread.sleep(5000);
-			ac.acceptNewAgent("Intruso", p3).start();
-
+			ac.acceptNewAgent(p3.getNome(), p3).start();
+			Thread.sleep(15000);
+			ac.acceptNewAgent(p4.getNome(), p4).start();
+			
 		}catch(StaleProxyException | InterruptedException e) {
 			throw new Error(e);
 		}

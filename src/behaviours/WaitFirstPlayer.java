@@ -3,9 +3,9 @@ package behaviours;
 import java.util.Random;
 import java.util.UUID;
 
-import com.sun.xml.internal.fastinfoset.algorithm.UUIDEncodingAlgorithm;
-
-import agents.ConversationConstants;
+import agents.Player;
+import checkers.Checkers;
+import checkers.CheckersManager;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -38,7 +38,11 @@ public class WaitFirstPlayer extends CyclicBehaviour {
 				System.out.println(myAgent.getLocalName()+": vou tentar rolar melhor, e ..." + myRoll);
 				
 				String uniqueID = UUID.randomUUID().toString();
-
+				
+				Checkers c = CheckersManager.createChecker(uniqueID);				
+				Player p = (Player) myAgent;
+				p.startGame(c, true);
+				
 				if(myRoll < roll) {
 					System.out.println(myAgent.getLocalName() + ": Droga, perdi.");
 					myAgent.addBehaviour(new Wait(uniqueID, msg.getSender().getLocalName()));
@@ -57,6 +61,7 @@ public class WaitFirstPlayer extends CyclicBehaviour {
 			}
 			
 			myAgent.send(reply);
+			System.out.println(myAgent.getLocalName()+": Enviei a resposta");
 			myAgent.removeBehaviour(this);
 		} else {
 			block();
