@@ -34,8 +34,8 @@ import javax.swing.JPanel;
  * @version 0.9b
  */
 
-public class Checkers{
-	
+public class Checkers {
+
 	private String id;
 	private boolean isEnded = false;
 	/** Keep track of the current turn */
@@ -45,7 +45,7 @@ public class Checkers{
 
 	/** The board which will store our game's state */
 	private Board board;
-	
+
 	/** The number of checkers remaining for Black side */
 	private int blackCheckersLeft;
 
@@ -54,9 +54,11 @@ public class Checkers{
 
 	/** Hold a reference to the currently selected Piece */
 	private Square selectedSquare;
+
 	public Board getBoard() {
 		return board;
 	}
+
 	/** Constructor takes no arguments and forms a new game */
 	public Checkers(String uniqueID) {
 		this.id = uniqueID;
@@ -82,12 +84,12 @@ public class Checkers{
 		board = new Board();
 		board.placeStartingPieces();
 
-		gui = new GUI(this, board);
+		gui = new GUI(board);
 
 	}
 
 	public void selectSquare(Square s) {
-		
+
 		Square sel = s;
 		// Ensure that the correct color Piece has been chosen
 		// The Piece's color should be equal to currentTurn, unless this is the first
@@ -185,19 +187,6 @@ public class Checkers{
 				// Update the number of checkers left
 				updateStatus();
 
-				// See if that move ended the game
-				String winningStr = winner();
-				if (winningStr != null) {
-					int restart = JOptionPane.showConfirmDialog(null, winningStr + " Do you want to start a new game?",
-							"New Game?", JOptionPane.YES_NO_OPTION);
-
-					if (restart == JOptionPane.YES_OPTION)
-						restartGame();
-					else {
-						gui.close();
-					}
-
-				}
 			}
 
 			else if (!found)
@@ -206,8 +195,6 @@ public class Checkers{
 		}
 
 	}
-
-	
 
 	/**
 	 * Update the text of piecesLeft to a string representation of the number of
@@ -281,34 +268,41 @@ public class Checkers{
 	}
 
 	/** End the game and start anew by resetting everything */
-	public void restartGame() {
+	public void endGame(boolean restart) {
+		if (restart) {
+			selectedSquare = null;
 
-		selectedSquare = null;
-		
-		redCheckersLeft = 12;
-		blackCheckersLeft = 12;
+			redCheckersLeft = 12;
+			blackCheckersLeft = 12;
 
-		currentTurn = Color.BLACK;
+			currentTurn = Color.BLACK;
 
-		updateStatus();
-		
+			updateStatus();
+		}else{
+			isEnded = true;
+			gui.close();
+		}
 
 	}
-	
+
 	public Board newBoard() {
 		board = new Board();
 		board.placeStartingPieces();
 		return board;
 	}
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String uniqueID) {
 		this.id = uniqueID;
 	}
+
 	public boolean isEnded() {
 		return isEnded;
 	}
+
 	public void setEnded(boolean isEnded) {
 		this.isEnded = isEnded;
 	}

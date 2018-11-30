@@ -1,6 +1,5 @@
 package checkers;
 
-import agents.ConversationConstants;
 import agents.Player;
 import jade.core.Profile;
 import jade.core.ProfileImpl;

@@ -43,7 +43,13 @@ public class JADEHelper {
 		dfAgentDescription.addServices(serviceDescription);
 		return dfAgentDescription;
 	}
-
+	
+	public static void esperar(int millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+		}
+	}
 	public static ArrayList<AID> searchPlayers(Agent myAgent) {
 		DFAgentDescription description = createDescription(null);
 

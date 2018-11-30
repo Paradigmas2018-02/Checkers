@@ -35,16 +35,11 @@ public class GUI implements ActionListener {
 	/** File menu */
 	private JMenu fileMenu;
 
-	/** New Game menu item */
-	private JMenuItem newGame;
 
 	/** Exit menu item */
 	private JMenuItem exit;
 
-	private Checkers checkers;
-
-	public GUI(Checkers checkers, Board board) {
-		this.checkers = checkers;
+	public GUI(Board board) {
 		// Set up the window information
 		frame = new JFrame("Multi Agent - Checkers");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,13 +60,9 @@ public class GUI implements ActionListener {
 		menubar = new JMenuBar();
 		fileMenu = new JMenu("File");
 
-		newGame = new JMenuItem("New Game");
-		newGame.addActionListener(this);
-
 		exit = new JMenuItem("Exit");
 		exit.addActionListener(this);
 
-		fileMenu.add(newGame);
 		fileMenu.add(exit);
 		menubar.add(fileMenu);
 
@@ -121,24 +112,9 @@ public class GUI implements ActionListener {
 	@Override
 	/** Perform the appropriate action when a menu item is clicked */
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == newGame) {
-			frame.setVisible(false);
-			frame.remove(boardpanel);
-			boardpanel = new JPanel(new GridLayout(8, 8));
-			boardpanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-			Board b = checkers.newBoard();
-			addBoardToPanel(b, boardpanel);
-
-			frame.pack();
-			frame.setVisible(true);
-			frame.add(boardpanel, 0);
-
-			checkers.restartGame();
-		} else if (e.getSource() == exit) {
+		if (e.getSource() == exit) {
 			close();
 		}
-
 	}
 
 	public void close() {
