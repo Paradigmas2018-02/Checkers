@@ -19,4 +19,17 @@ public class CheckersManager {
 		}
 		return null;
 	}
+
+	public static void removeChecker(String id) {
+		Checkers target = null;
+		for (Checkers c : jogos) {
+			if (c.getId().equals(id)) {
+				target = c;
+			}
+		}
+		if (target != null) {
+			target.endGame(false);
+			jogos.remove(target);			
+		}
+	}
 }

@@ -56,14 +56,13 @@ public class Player extends Agent {
 
 			game.selectSquare(game.getBoard().getSquare(p));
 
-			JADEHelper.esperar(1000);
+			JADEHelper.esperarVariando(100);
 
 			game.selectSquare(move);
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 
 	private Vector<Move> getAllPossibleMoves() {
@@ -99,7 +98,9 @@ public class Player extends Agent {
 		}
 		return false;
 	}
-
+	public void desistir() {
+		takeDown();
+	}
 	protected void takeDown() {
 		try {
 			DFService.deregister(this);

@@ -1,37 +1,73 @@
 package behaviours;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
+
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 import agents.Player;
 import checkers.Checkers;
 import checkers.CheckersManager;
+import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 public class WaitAnotherPlayer extends CyclicBehaviour {
-
+	
+	private AID specificPlayerName;
+	private boolean hasAdversary;
+	private Date horario;
+	public WaitAnotherPlayer(AID playerName) {
+		specificPlayerName = playerName;
+		hasAdversary = true;
+		horario = new Date();
+		System.out.println("Esperando:" + playerName.getLocalName());
+	}
+	
+	public WaitAnotherPlayer() {
+		hasAdversary = false;
+	}
+	
 	@Override
 	public void action() {
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
 
 		ACLMessage msg = myAgent.receive(mt);
 		if (msg != null) {
-			answerPlayer(msg);
+			if(hasAdversary) {
+				timeOutSpecificPlayer();
+				if(msg.getSender().equals(specificPlayerName)) {
+					System.out.println(myAgent.getLocalName() + ": Vamos!");
+					answerPlayer(msg);
+				}
+			}else {				
+				System.out.println(myAgent.getLocalName() + ": Opa, finalmente alguém querendo jogar :D");
+				answerPlayer(msg);
+			}
 		} else {
 			block();
 		}
 	}
 
+	private void timeOutSpecificPlayer() {
+		System.out.println("tic");
+		Date horaAtual = new Date();
+		if (horaAtual.getTime() - horario.getTime() > 20000) {
+			System.out.println(myAgent.getLocalName() + " cansei de esperar " +", vou esperar outra pessoa :c");
+			hasAdversary = false;
+			specificPlayerName = null;
+		}
+	}
+
 	private void answerPlayer(ACLMessage msg) {
-		System.out.println(myAgent.getLocalName() + ": Opa, finalmente alguém querendo jogar :D");
 
 		Integer roll = parseMessage(msg);
 
 		ACLMessage reply = msg.createReply();
-
 		if (roll != null) {
+			System.out.println(myAgent.getLocalName() + "PREPARANDO RESPOSTA");
 			prepareMyReply(msg, roll, reply);
 		} else {
 			reply.setPerformative(ACLMessage.REFUSE);
@@ -78,10 +114,10 @@ public class WaitAnotherPlayer extends CyclicBehaviour {
 	private void verifyWhoStarts(ACLMessage msg, Integer roll, int myRoll, String uniqueID) {
 		if (myRoll < roll) {
 			System.out.println(myAgent.getLocalName() + ": Droga, perdi.");
-			myAgent.addBehaviour(new WaitTurn(uniqueID, msg.getSender().getLocalName()));
+			myAgent.addBehaviour(new WaitTurn(uniqueID, msg.getSender()));
 		} else {
 			System.out.println(myAgent.getLocalName() + ": Rá ganhei, vou começar jogando");
-			myAgent.addBehaviour(new Play(uniqueID, msg.getSender().getLocalName()));
+			myAgent.addBehaviour(new Play(uniqueID, msg.getSender()));
 		}
 	}
 

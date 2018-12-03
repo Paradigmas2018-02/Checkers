@@ -19,15 +19,21 @@ public class FindOtherPlayer extends Behaviour {
 	private boolean isEsperandoResposta = false;
 	private boolean jogoDecidido = false;
 	private Integer myRoll;
-
 	private ArrayList<AID> players;
-
 	private Date horario;
 
 	public FindOtherPlayer(Agent agent) {
 		setAgent(agent);
 		System.out.println(myAgent.getLocalName() + " está procurando outro player :)");
 		players = JADEHelper.searchPlayers(myAgent);
+	}
+
+	public FindOtherPlayer(Agent agent, AID target) {
+
+		setAgent(agent);
+		System.out.println(myAgent.getLocalName() + " vai recomeçar com o " + target.getLocalName());
+		players = new ArrayList<AID>();
+		players.add(target);
 	}
 
 	@Override
@@ -75,10 +81,10 @@ public class FindOtherPlayer extends Behaviour {
 		if (roll > myRoll) {
 			System.out.println(myAgent.getLocalName() + ": affs, perdi. " + msg.getSender().getLocalName()
 					+ ", pode começar que to esperando.");
-			myAgent.addBehaviour(new WaitTurn(uniqueID, msg.getSender().getLocalName()));
+			myAgent.addBehaviour(new WaitTurn(uniqueID, msg.getSender()));
 		} else {
 			System.out.println(myAgent.getLocalName() + ": Rá ganhei, vou começar jogando");
-			myAgent.addBehaviour(new Play(uniqueID, msg.getSender().getLocalName()));
+			myAgent.addBehaviour(new Play(uniqueID, msg.getSender()));
 		}
 	}
 
@@ -112,6 +118,7 @@ public class FindOtherPlayer extends Behaviour {
 			myAgent.send(aclMessage);
 			isEsperandoResposta = true;
 			horario = new Date();
+			
 		} else {
 			System.out.println(myAgent.getLocalName() + ": Não encontrei ninguém pra jogar, vou esperar.");
 			myAgent.addBehaviour(new WaitAnotherPlayer());

@@ -8,16 +8,16 @@ import jade.lang.acl.ACLMessage;
 
 public class Play extends OneShotBehaviour {
 	private String idConversation;
-	private String adversaryName;
+	private AID adversary;
 
-	public Play(String uniqueID, String adversaryName) {
+	public Play(String uniqueID, AID adversary) {
 		idConversation = uniqueID;
-		this.adversaryName = adversaryName;
+		this.adversary = adversary;
 	}
 
 	public void action() {
 
-		AID adversaryID = JADEHelper.searchPlayer(myAgent, adversaryName);
+		AID adversaryID = JADEHelper.searchPlayer(myAgent, adversary.getLocalName());
 		if (adversaryID != null) {
 			ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
 			aclMessage.setConversationId(idConversation);
@@ -28,7 +28,7 @@ public class Play extends OneShotBehaviour {
 				System.out.println(myAgent.getAID().getLocalName() + ": Joguei, sua vez!");
 				aclMessage.addReceiver(adversaryID);
 				myAgent.send(aclMessage);
-				myAgent.addBehaviour(new WaitTurn(idConversation, adversaryName));
+				myAgent.addBehaviour(new WaitTurn(idConversation, adversary));
 			}
 		} else {
 			System.out.println(myAgent.getLocalName() + ": Não achei o outro cara, algo deu errado no jogo :/");
@@ -39,7 +39,7 @@ public class Play extends OneShotBehaviour {
 	public boolean play() {
 		if (myAgent instanceof Player) {
 			Player p = (Player) myAgent;
-			return p.play(adversaryName);
+			return p.play(adversary.getLocalName());
 		} else
 			return true;
 	}
